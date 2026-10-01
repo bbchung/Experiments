@@ -39,7 +39,7 @@ import venue_transfer as quotes
 
 from AstraResearch.code_guard import source_files
 from AstraResearch.engine_identity import identity
-from AstraResearch.instruments import stock_futures
+from AstraResearch.Experiments.instruments import stock_futures
 from AstraResearch.io import ContractError, file_hash, file_stamp, lock, read_yaml, write_yaml
 from AstraResearch.native_contract import sample_summary, validate_receipt
 from AstraResearch.store import ExposureLedger
@@ -123,6 +123,10 @@ def prepare(registration, output):
         target = output / "source/AstraResearch" / source.relative_to(ROOT)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
+    instruments_source = Path(sys.modules["AstraResearch.Experiments.instruments"].__file__)
+    instruments_target = output / "source/AstraResearch/Experiments/instruments.py"
+    instruments_target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(instruments_source, instruments_target)
     for source in [Path(__file__), Path(quotes.__file__), ROOT / "engine_identity.py"]:
         shutil.copy2(source, output / "source" / source.name)
     shutil.copy2(path(config["native_engine"]["source_manifest"]), output / "native-source-manifest.json")
@@ -238,7 +242,7 @@ def verify_freeze(output):
                 raise ContractError("Amended implementation changed: " + name)
     if Path(__file__).resolve() != frozen_source / "basis_mechanism.py":
         raise ContractError("Execute the frozen output/source/basis_mechanism.py for all non-prepare stages")
-    for name in ["AstraResearch.io", "AstraResearch.instruments", "AstraResearch.store", "AstraResearch.native_contract", "engine_identity", "venue_transfer"]:
+    for name in ["AstraResearch.io", "AstraResearch.Experiments.instruments", "AstraResearch.store", "AstraResearch.native_contract", "engine_identity", "venue_transfer"]:
         if not Path(sys.modules[name].__file__).resolve().is_relative_to(frozen_source):
             raise ContractError("Active dependency is outside the frozen source: " + name)
     freeze = read_yaml(output / "freeze.yaml")

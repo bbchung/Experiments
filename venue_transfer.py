@@ -39,7 +39,7 @@ import zstandard
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent))
 
-from AstraResearch.instruments import stock_futures
+from AstraResearch.Experiments.instruments import stock_futures
 from AstraResearch.io import ContractError, file_hash, file_stamp, lock, read_yaml, write_yaml
 from AstraResearch.store import ExposureLedger
 
@@ -137,7 +137,8 @@ def prepare(config_path):
         raise ContractError("Study already frozen; do not overwrite its registration")
     owned = [config_path.resolve(), Path(__file__).resolve(), ROOT / "tests/test_venue_transfer.py"]
     code = [*owned, ROOT / "runs/research/run-pool80.sh"] + [
-        ROOT / p for p in ["instruments.py", "io.py", "store.py", "Experiments/research_walkforward.py", "Experiments/research_data.py", "Experiments/research_replay.py"]
+        ROOT / p
+        for p in ["Experiments/instruments.py", "io.py", "store.py", "Experiments/research_walkforward.py", "Experiments/research_data.py", "Experiments/research_replay.py"]
     ]
     code += [
         ROOT.parent / p
