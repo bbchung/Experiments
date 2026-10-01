@@ -1,0 +1,2 @@
+# Preserve the exact bytes of the hash-bound research plan, including its EOF blank line.
+information_state_20260930/PLAN.md whitespace=-blank-at-eof
