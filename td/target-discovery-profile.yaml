@@ -1,0 +1,4 @@
+# Native data/market settings only; TD does not run this profile's PMQ/HPO workflow.
+extends: ../../workflows/profiles/profile.yaml
+paths:
+  coco_binary: build/Release/src/app/coco
